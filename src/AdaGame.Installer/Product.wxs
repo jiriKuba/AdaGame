@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><?define AdaGame_TargetDir=$(var.AdaGame.TargetDir)?>
+	<Product Id="*" Name="AdaGame.Installer" Language="1033" Version="1.0.0.0" Manufacturer="" UpgradeCode="c415100b-28c4-4016-8b7d-ea5c11cffc49">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <!--<Icon Id="appIcon.ico" SourceFile="$(var.ProjectDir)appIcon.ico" />
+    <Property Id="ARPPRODUCTICON" Value="appIcon.ico" />-->
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\license.rtf" />
+    <!-- licence enable -->
+    <UIRef Id="WixUI_Minimal" />
+    <!-- UI enable -->
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+    <Feature Id="ProductFeature" Title="AdaGame" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <!-- enable shortcuts -->
+      <ComponentRef Id="ApplicationShortcut" />
+      <ComponentRef Id="ApplicationShortcutDesktop" />
+    </Feature>
+
+		<Feature Id="ProductFeature" Title="AdaGame.Installer" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentGroupRef Id="ProgramFilesFolder_files" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="AdaGame" />
+			</Directory>
+      <!-- enable shortcuts -->
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="AdaGame"/>
+      </Directory>
+      <Directory Id="DesktopFolder" Name="Desktop"/>
+    </Directory>
+	</Fragment>
+
+  <!-- enable shortcuts -->
+  <Fragment>
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="ApplicationShortcut" Guid="f45cde0d-3dd0-423a-9319-c2c056f0d595">
+        <Shortcut Id="ApplicationStartMenuShortcut" Name="StringFormatter" Description="StringFormatter" Target="[INSTALLFOLDER]StringFormatter.Wpf.exe" WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\StringFormatter" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="ApplicationShortcutDesktop" Guid="7b8a7f10-4eb8-4afe-8451-a000d58d9331">
+        <Shortcut Id="ApplicationDesktopShortcut" Name="StringFormatter" Description="StringFormatter" Target="[INSTALLFOLDER]StringFormatter.Wpf.exe" WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\StringFormatter" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+
+  <!-- enable shortcuts -->
+  <Fragment>
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="ApplicationShortcut" Guid="f45cde0d-3dd0-423a-9319-c2c056f0d595">
+        <Shortcut Id="ApplicationStartMenuShortcut" Name="StringFormatter" Description="StringFormatter" Target="[INSTALLFOLDER]StringFormatter.Wpf.exe" WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\StringFormatter" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="ApplicationShortcutDesktop" Guid="7b8a7f10-4eb8-4afe-8451-a000d58d9331">
+        <Shortcut Id="ApplicationDesktopShortcut" Name="StringFormatter" Description="StringFormatter" Target="[INSTALLFOLDER]StringFormatter.Wpf.exe" WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\StringFormatter" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+			<!-- <Component Id="ProductComponent"> -->
+				<!-- TODO: Insert files, registry keys, and other resources here. -->
+			<!-- </Component> -->
+		</ComponentGroup>
+	</Fragment>
+	<Fragment>
+	  <ComponentGroup Id="ProgramFilesFolder_files" Directory="ProgramFilesFolder">
+	    <Component Id="AdaGame.exe" Guid="6d00c39e-9bb5-4cf8-b236-3478a5f8dba2">
+	      <File Id="AdaGame.exe" Name="AdaGame.exe" Source="$(var.AdaGame_TargetDir)AdaGame.exe" />
+	    </Component>
+	    <Component Id="AdaGame.exe.config" Guid="525eb3c8-c3bc-4c45-9df4-b41f818e2ebb">
+	      <File Id="AdaGame.exe.config" Name="AdaGame.exe.config" Source="$(var.AdaGame_TargetDir)AdaGame.exe.config" />
+	    </Component>
+	    <Component Id="MonoGame.Framework.dll" Guid="3937a320-9c7d-4080-8f1e-363d6c30d455">
+	      <File Id="MonoGame.Framework.dll" Name="MonoGame.Framework.dll" Source="$(var.AdaGame_TargetDir)MonoGame.Framework.dll" />
+	    </Component>
+	    <Component Id="MonoGame.Extended.Particles.dll" Guid="d064fd62-1d3c-4b39-9515-9eb8199004f9">
+	      <File Id="MonoGame.Extended.Particles.dll" Name="MonoGame.Extended.Particles.dll" Source="$(var.AdaGame_TargetDir)MonoGame.Extended.Particles.dll" />
+	    </Component>
+	    <Component Id="MonoGame.Extended.dll" Guid="b4e6acfa-ba87-48b4-af45-742e88411ccd">
+	      <File Id="MonoGame.Extended.dll" Name="MonoGame.Extended.dll" Source="$(var.AdaGame_TargetDir)MonoGame.Extended.dll" />
+	    </Component>
+	    <Component Id="Newtonsoft.Json.dll" Guid="f72ba19c-6274-41b5-aaa5-e387e2556b6f">
+	      <File Id="Newtonsoft.Json.dll" Name="Newtonsoft.Json.dll" Source="$(var.AdaGame_TargetDir)Newtonsoft.Json.dll" />
+	    </Component>
+	    <Component Id="AdaGame.pdb" Guid="732c200d-4179-4201-97bf-c04b33b41b43">
+	      <File Id="AdaGame.pdb" Name="AdaGame.pdb" Source="$(var.AdaGame_TargetDir)AdaGame.pdb" />
+	    </Component>
+	  </ComponentGroup>
+	</Fragment>
+</Wix>
