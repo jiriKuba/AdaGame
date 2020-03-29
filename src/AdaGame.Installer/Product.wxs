@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><?define AdaGame_TargetDir=$(var.AdaGame.TargetDir)?>
-	<Product Id="*" Name="AdaGame.Installer" Language="1033" Version="1.0.0.0" Manufacturer="" UpgradeCode="c415100b-28c4-4016-8b7d-ea5c11cffc49">
+	<Product Id="*" Name="AdaGame" Language="1033" Version="1.0.0.0" Manufacturer="Jiri Kuba" UpgradeCode="8a49a32f-9b8d-4846-a005-335b9513782f">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
-    <!--<Icon Id="appIcon.ico" SourceFile="$(var.ProjectDir)appIcon.ico" />
-    <Property Id="ARPPRODUCTICON" Value="appIcon.ico" />-->
+    <Icon Id="favicon.ico" SourceFile="$(var.ProjectDir)favicon.ico" />
+    <Property Id="ARPPRODUCTICON" Value="favicon.ico" />
     <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\license.rtf" />
     <!-- licence enable -->
     <UIRef Id="WixUI_Minimal" />
@@ -15,21 +15,30 @@
 
     <Feature Id="ProductFeature" Title="AdaGame" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
+      <ComponentGroupRef Id="ContentFolderContent" />
+      <ComponentGroupRef Id="SixtyFourBitFolderContent" />
+      <ComponentGroupRef Id="ThirtyTwoBitFolderContent" />
       <!-- enable shortcuts -->
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="ApplicationShortcutDesktop" />
     </Feature>
 
-		<Feature Id="ProductFeature" Title="AdaGame.Installer" Level="1">
+		<!--<Feature Id="ProductFeature" Title="AdaGame.Installer" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
 			<ComponentGroupRef Id="ProgramFilesFolder_files" />
-		</Feature>
+		</Feature>-->
 	</Product>
 
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="AdaGame" />
+        <Directory Id="INSTALLFOLDER" Name="AdaGame" >
+          <Directory Id="ContenFolder" Name="Content">
+            <Directory Id="SprityFolder" Name="Sprity" />
+          </Directory>
+          <Directory Id="SixtyFourBitFolder" Name="x64" />
+          <Directory Id="ThirtyTwoBitFolder" Name="x86" />
+        </Directory>
 			</Directory>
       <!-- enable shortcuts -->
       <Directory Id="ProgramMenuFolder">
@@ -42,70 +51,142 @@
   <!-- enable shortcuts -->
   <Fragment>
     <DirectoryRef Id="ApplicationProgramsFolder">
-      <Component Id="ApplicationShortcut" Guid="f45cde0d-3dd0-423a-9319-c2c056f0d595">
-        <Shortcut Id="ApplicationStartMenuShortcut" Name="StringFormatter" Description="StringFormatter" Target="[INSTALLFOLDER]StringFormatter.Wpf.exe" WorkingDirectory="INSTALLFOLDER" />
+      <Component Id="ApplicationShortcut" Guid="653f8f5f-e3bb-494a-b346-3de21562ac1d">
+        <Shortcut Id="ApplicationStartMenuShortcut" Name="AdaGame" Description="AdaGame" Target="[INSTALLFOLDER]AdaGame.exe" WorkingDirectory="INSTALLFOLDER" />
         <RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
-        <RegistryValue Root="HKCU" Key="Software\StringFormatter" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+        <RegistryValue Root="HKCU" Key="Software\AdaGame" Name="installed" Type="integer" Value="1" KeyPath="yes" />
       </Component>
     </DirectoryRef>
     <DirectoryRef Id="DesktopFolder">
-      <Component Id="ApplicationShortcutDesktop" Guid="7b8a7f10-4eb8-4afe-8451-a000d58d9331">
-        <Shortcut Id="ApplicationDesktopShortcut" Name="StringFormatter" Description="StringFormatter" Target="[INSTALLFOLDER]StringFormatter.Wpf.exe" WorkingDirectory="INSTALLFOLDER" />
+      <Component Id="ApplicationShortcutDesktop" Guid="e1e4ffc5-eb65-4910-9303-865a305dce0c">
+        <Shortcut Id="ApplicationDesktopShortcut" Name="AdaGame" Description="AdaGame" Target="[INSTALLFOLDER]AdaGame.exe" WorkingDirectory="INSTALLFOLDER" />
         <RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
-        <RegistryValue Root="HKCU" Key="Software\StringFormatter" Name="installed" Type="integer" Value="1" KeyPath="yes" />
-      </Component>
-    </DirectoryRef>
-  </Fragment>
-
-  <!-- enable shortcuts -->
-  <Fragment>
-    <DirectoryRef Id="ApplicationProgramsFolder">
-      <Component Id="ApplicationShortcut" Guid="f45cde0d-3dd0-423a-9319-c2c056f0d595">
-        <Shortcut Id="ApplicationStartMenuShortcut" Name="StringFormatter" Description="StringFormatter" Target="[INSTALLFOLDER]StringFormatter.Wpf.exe" WorkingDirectory="INSTALLFOLDER" />
-        <RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
-        <RegistryValue Root="HKCU" Key="Software\StringFormatter" Name="installed" Type="integer" Value="1" KeyPath="yes" />
-      </Component>
-    </DirectoryRef>
-    <DirectoryRef Id="DesktopFolder">
-      <Component Id="ApplicationShortcutDesktop" Guid="7b8a7f10-4eb8-4afe-8451-a000d58d9331">
-        <Shortcut Id="ApplicationDesktopShortcut" Name="StringFormatter" Description="StringFormatter" Target="[INSTALLFOLDER]StringFormatter.Wpf.exe" WorkingDirectory="INSTALLFOLDER" />
-        <RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
-        <RegistryValue Root="HKCU" Key="Software\StringFormatter" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+        <RegistryValue Root="HKCU" Key="Software\AdaGame" Name="installed" Type="integer" Value="1" KeyPath="yes" />
       </Component>
     </DirectoryRef>
   </Fragment>
 
 	<Fragment>
-		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
-			<!-- <Component Id="ProductComponent"> -->
-				<!-- TODO: Insert files, registry keys, and other resources here. -->
-			<!-- </Component> -->
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">      
+      <Component Id="AdaGame.exe" Guid="1b7f9603-ccd9-4bc3-bd52-1aeec1312f55">
+        <File Id="AdaGame.exe" Name="AdaGame.exe" Source="$(var.AdaGame_TargetDir)AdaGame.exe" />
+      </Component>
+      <Component Id="AdaGame.exe.config" Guid="6997a01f-3508-43c6-bc02-8477e32c6ac5">
+        <File Id="AdaGame.exe.config" Name="AdaGame.exe.config" Source="$(var.AdaGame_TargetDir)AdaGame.exe.config" />
+      </Component>
+      <Component Id="AdaGame.pdb" Guid="02795b96-c4f0-464b-bdd4-45070452e1fc">
+        <File Id="AdaGame.pdb" Name="AdaGame.pdb" Source="$(var.AdaGame_TargetDir)AdaGame.pdb" />
+      </Component>
+      <Component Id="libopenal.1.dylib" Guid="69d6e331-687d-4067-95e3-f47b9bbd157a">
+        <File Id="libopenal.1.dylib" Name="libopenal.1.dylib" Source="$(var.AdaGame_TargetDir)libopenal.1.dylib" />
+      </Component>
+      <Component Id="libSDL2_2.0.0.dylib" Guid="824bbccb-f29c-44ce-9f22-8235dbb3c520">
+        <File Id="libSDL2_2.0.0.dylib" Name="libSDL2-2.0.0.dylib" Source="$(var.AdaGame_TargetDir)libSDL2-2.0.0.dylib" />
+      </Component>
+      <Component Id="MonoGame.Extended.dll" Guid="3bb455db-1655-4ec7-a747-334b8a12ea60">
+        <File Id="MonoGame.Extended.dll" Name="MonoGame.Extended.dll" Source="$(var.AdaGame_TargetDir)MonoGame.Extended.dll" />
+      </Component>
+      <Component Id="MonoGame.Extended.Particles.dll" Guid="1e5c411f-2caf-43af-aa0c-70f3c78d99a4">
+        <File Id="MonoGame.Extended.Particles.dll" Name="MonoGame.Extended.Particles.dll" Source="$(var.AdaGame_TargetDir)MonoGame.Extended.Particles.dll" />
+      </Component>
+      <Component Id="MonoGame.Framework.dll" Guid="93d92825-e9e2-4101-a548-28dbbc14540a">
+        <File Id="MonoGame.Framework.dll" Name="MonoGame.Framework.dll" Source="$(var.AdaGame_TargetDir)MonoGame.Framework.dll" />
+      </Component>
+      <Component Id="MonoGame.Framework.dll.config" Guid="4224311b-aedf-48c4-9723-c14a5fc4a670">
+        <File Id="MonoGame.Framework.dll.config" Name="MonoGame.Framework.dll.config" Source="$(var.AdaGame_TargetDir)MonoGame.Framework.dll.config" />
+      </Component>
+      <Component Id="Newtonsoft.Json.dll" Guid="919a05e3-5ea7-405f-a5b5-e780c2f97973">
+        <File Id="Newtonsoft.Json.dll" Name="Newtonsoft.Json.dll" Source="$(var.AdaGame_TargetDir)Newtonsoft.Json.dll" />
+      </Component>
+      <Component Id="Newtonsoft.Json.xml" Guid="1b617dae-8685-4665-b093-f76f7430f033">
+        <File Id="Newtonsoft.Json.xml" Name="Newtonsoft.Json.xml" Source="$(var.AdaGame_TargetDir)Newtonsoft.Json.xml" />
+      </Component>
+      <Component Id="SharpDX.Direct2D1.dll" Guid="0f5e365e-adb0-4f03-93df-8d7b4b367c17">
+        <File Id="SharpDX.Direct2D1.dll" Name="SharpDX.Direct2D1.dll" Source="$(var.AdaGame_TargetDir)SharpDX.Direct2D1.dll" />
+      </Component>
+      <Component Id="SharpDX.Direct2D1.xml" Guid="092f0cae-974d-4ca4-89bd-cd81a3c11300">
+        <File Id="SharpDX.Direct2D1.xml" Name="SharpDX.Direct2D1.xml" Source="$(var.AdaGame_TargetDir)SharpDX.Direct2D1.xml" />
+      </Component>
+      <Component Id="SharpDX.Direct3D11.dll" Guid="5716d10d-c511-45ac-9d6a-cef34a4b4f7f">
+        <File Id="SharpDX.Direct3D11.dll" Name="SharpDX.Direct3D11.dll" Source="$(var.AdaGame_TargetDir)SharpDX.Direct3D11.dll" />
+      </Component>
+      <Component Id="SharpDX.Direct3D11.xml" Guid="20ec742d-97e2-41d8-a08e-43ac40265725">
+        <File Id="SharpDX.Direct3D11.xml" Name="SharpDX.Direct3D11.xml" Source="$(var.AdaGame_TargetDir)SharpDX.Direct3D11.xml" />
+      </Component>
+      <Component Id="SharpDX.dll" Guid="dbb94b2c-7f32-4db5-8032-8c52f2af77ec">
+        <File Id="SharpDX.dll" Name="SharpDX.dll" Source="$(var.AdaGame_TargetDir)SharpDX.dll" />
+      </Component>
+      <Component Id="SharpDX.DXGI.dll" Guid="8d4d452d-ed37-4538-9986-af952ed35b19">
+        <File Id="SharpDX.DXGI.dll" Name="SharpDX.DXGI.dll" Source="$(var.AdaGame_TargetDir)SharpDX.DXGI.dll" />
+      </Component>
+      <Component Id="SharpDX.DXGI.xml" Guid="04a94d4c-dfec-4559-9c8d-5b1f8c944b0c">
+        <File Id="SharpDX.DXGI.xml" Name="SharpDX.DXGI.xml" Source="$(var.AdaGame_TargetDir)SharpDX.DXGI.xml" />
+      </Component>
+      <Component Id="SharpDX.MediaFoundation.dll" Guid="fdfaba4f-f8e0-440c-9e3b-c7af2ab205a2">
+        <File Id="SharpDX.MediaFoundation.dll" Name="SharpDX.MediaFoundation.dll" Source="$(var.AdaGame_TargetDir)SharpDX.MediaFoundation.dll" />
+      </Component>
+      <Component Id="SharpDX.MediaFoundation.xml" Guid="d7178053-14c8-4a95-b0c9-6f93b54a1175">
+        <File Id="SharpDX.MediaFoundation.xml" Name="SharpDX.MediaFoundation.xml" Source="$(var.AdaGame_TargetDir)SharpDX.MediaFoundation.xml" />
+      </Component>
+      <Component Id="SharpDX.XAudio2.dll" Guid="e4aad081-4ac3-42c4-82db-b74119282c92">
+        <File Id="SharpDX.XAudio2.dll" Name="SharpDX.XAudio2.dll" Source="$(var.AdaGame_TargetDir)SharpDX.XAudio2.dll" />
+      </Component>
+      <Component Id="SharpDX.XAudio2.xml" Guid="79e58b60-324e-4d45-b454-cab5cd7b80c0">
+        <File Id="SharpDX.XAudio2.xml" Name="SharpDX.XAudio2.xml" Source="$(var.AdaGame_TargetDir)SharpDX.XAudio2.xml" />
+      </Component>
+      <Component Id="SharpDX.XInput.dll" Guid="cb5931fd-c0d1-481f-985f-47be4491a614">
+        <File Id="SharpDX.XInput.dll" Name="SharpDX.XInput.dll" Source="$(var.AdaGame_TargetDir)SharpDX.XInput.dll" />
+      </Component>
+      <Component Id="SharpDX.XInput.xml" Guid="ba6c0df1-e330-433c-ad0c-be86d009ffff">
+        <File Id="SharpDX.XInput.xml" Name="SharpDX.XInput.xml" Source="$(var.AdaGame_TargetDir)SharpDX.XInput.xml" />
+      </Component>
+      <Component Id="SharpDX.xml" Guid="71e0ebbc-4a53-4416-bff8-f5c120004f4d">
+        <File Id="SharpDX.xml" Name="SharpDX.xml" Source="$(var.AdaGame_TargetDir)SharpDX.xml" />
+      </Component>
+      
 		</ComponentGroup>
+    
 	</Fragment>
-	<Fragment>
-	  <ComponentGroup Id="ProgramFilesFolder_files" Directory="ProgramFilesFolder">
-	    <Component Id="AdaGame.exe" Guid="6d00c39e-9bb5-4cf8-b236-3478a5f8dba2">
-	      <File Id="AdaGame.exe" Name="AdaGame.exe" Source="$(var.AdaGame_TargetDir)AdaGame.exe" />
-	    </Component>
-	    <Component Id="AdaGame.exe.config" Guid="525eb3c8-c3bc-4c45-9df4-b41f818e2ebb">
-	      <File Id="AdaGame.exe.config" Name="AdaGame.exe.config" Source="$(var.AdaGame_TargetDir)AdaGame.exe.config" />
-	    </Component>
-	    <Component Id="MonoGame.Framework.dll" Guid="3937a320-9c7d-4080-8f1e-363d6c30d455">
-	      <File Id="MonoGame.Framework.dll" Name="MonoGame.Framework.dll" Source="$(var.AdaGame_TargetDir)MonoGame.Framework.dll" />
-	    </Component>
-	    <Component Id="MonoGame.Extended.Particles.dll" Guid="d064fd62-1d3c-4b39-9515-9eb8199004f9">
-	      <File Id="MonoGame.Extended.Particles.dll" Name="MonoGame.Extended.Particles.dll" Source="$(var.AdaGame_TargetDir)MonoGame.Extended.Particles.dll" />
-	    </Component>
-	    <Component Id="MonoGame.Extended.dll" Guid="b4e6acfa-ba87-48b4-af45-742e88411ccd">
-	      <File Id="MonoGame.Extended.dll" Name="MonoGame.Extended.dll" Source="$(var.AdaGame_TargetDir)MonoGame.Extended.dll" />
-	    </Component>
-	    <Component Id="Newtonsoft.Json.dll" Guid="f72ba19c-6274-41b5-aaa5-e387e2556b6f">
-	      <File Id="Newtonsoft.Json.dll" Name="Newtonsoft.Json.dll" Source="$(var.AdaGame_TargetDir)Newtonsoft.Json.dll" />
-	    </Component>
-	    <Component Id="AdaGame.pdb" Guid="732c200d-4179-4201-97bf-c04b33b41b43">
-	      <File Id="AdaGame.pdb" Name="AdaGame.pdb" Source="$(var.AdaGame_TargetDir)AdaGame.pdb" />
-	    </Component>
-	  </ComponentGroup>
-	</Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ContentFolderContent" Directory="SprityFolder">
+      <Component Id="ball.xnb" Guid="e14c706d-5c25-4a70-9a96-0768b7cae61f">
+        <File Id="ball.xnb" Name="ball.xnb" Source="$(var.AdaGame_TargetDir)Content\Sprity\ball.xnb" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="SixtyFourBitFolderContent" Directory="SixtyFourBitFolder">
+      <Component Id="x64_libopenal.so.1" Guid="00eefe59-cc57-4e41-8f36-fb01fe56b145">
+        <File Id="x64_libopenal.so.1" Name="libopenal.so.1" Source="$(var.AdaGame_TargetDir)x64\libopenal.so.1" />
+      </Component>
+      <Component Id="x64_libSDL2_2.0.so.0" Guid="24dc4955-b2ae-4167-9672-8ba2f9182d3f">
+        <File Id="x64_libSDL2_2.0.so.0" Name="libSDL2-2.0.so.0" Source="$(var.AdaGame_TargetDir)x64\libSDL2-2.0.so.0" />
+      </Component>
+      <Component Id="x64_SDL2.dll" Guid="99f6b213-ac39-49cc-b85a-6298e15a4a7c">
+        <File Id="x64_SDL2.dll" Name="SDL2.dll" Source="$(var.AdaGame_TargetDir)x64\SDL2.dll" />
+      </Component>
+      <Component Id="x64_soft_oal.dll" Guid="f3a6a661-a058-4ded-baca-0d8ecde6ce3f">
+        <File Id="x64_soft_oal.dll" Name="soft_oal.dll" Source="$(var.AdaGame_TargetDir)x64\soft_oal.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ThirtyTwoBitFolderContent" Directory="ThirtyTwoBitFolder">
+      <Component Id="x86_libopenal.so.1" Guid="19637614-c47d-46db-bb67-78dec2a2accc">
+        <File Id="x86_libopenal.so.1" Name="libopenal.so.1" Source="$(var.AdaGame_TargetDir)x86\libopenal.so.1" />
+      </Component>
+      <Component Id="x86_libSDL2_2.0.so.0" Guid="750505c2-6395-4a06-85ad-12bdc60e7587">
+        <File Id="x86_libSDL2_2.0.so.0" Name="libSDL2-2.0.so.0" Source="$(var.AdaGame_TargetDir)x86\libSDL2-2.0.so.0" />
+      </Component>
+      <Component Id="x86_SDL2.dll" Guid="0a07cce6-4965-4f13-b2f7-db93eb7ca11d">
+        <File Id="x86_SDL2.dll" Name="SDL2.dll" Source="$(var.AdaGame_TargetDir)x86\SDL2.dll" />
+      </Component>
+      <Component Id="x86_soft_oal.dll" Guid="5d2c4f51-4cd0-4944-a8b6-21638745bd8c">
+        <File Id="x86_soft_oal.dll" Name="soft_oal.dll" Source="$(var.AdaGame_TargetDir)x86\soft_oal.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
 </Wix>
